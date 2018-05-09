@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Stacja Pogodowa</string>
+    <string name="nullText">-</string>
+    <string name="temperatureUnit">℃</string>
+    <string name="pressureUnit">hPa</string>
+    <string name="humidityUnit">%</string>
+    <string name="insolationUnit">lx</string>
+    <string name="temperatureText">Temperatura</string>
+    <string name="pressureText">Ciśnienie atmosferyczne</string>
+    <string name="humidityText">Wilgotność powietrza</string>
+    <string name="insolationText">Nasłonecznienie</string>
+    <string name="chooseServerText">Wybierz czujnik z którym chcesz się połączyć:</string>
+    <string name="chooseStatisticsText">Wybierz rodzaj statystyk które chcesz zobaczyć:</string>
+    <string-array name="server_type">
+        <item>Czujnik nr 1</item>
+        <item>Czujnik nr 2</item>
+        <item>Czujnik nr 3</item>
+    </string-array>
+    <string-array name="statistics_type">
+        <item>Temperatura</item>
+        <item>Wilgotność</item>
+        <item>Nasłonecznienie</item>
+        <item>Ciśnienie</item>
+    </string-array>
+    <string name="buttonConnect">Połącz</string>
+    <string name="buttonChoose">Wybierz</string>
+    <string name="connectServerToast">Połączono z czujnikiem</string>
+    <string name="updateServerToast">Dane zostały zaaktualizowane</string>
+    <string name="notConnectSeverToast">Połączenie z serwerem nie zostało nawiązane</string>
+    <string name="negativeWelcomeText">Witaj w aplikacji stacji pogodowej,aby uzykać informację na temat aktualnej pogody, połącz się z czujnikiem</string>
+    <string name="positiveWelcomeText">Witaj w aplikacji stacji pogodowej,dane pogodowe pochodzą z czujnika o nazwe:</string>
+    <string name="negativeStatText">Aby uzyskać aktualne statystyki, połącz się z serwerem!</string>
+</resources>
