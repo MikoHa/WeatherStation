@@ -3,6 +3,7 @@ package com.mikolaj_app.stacjapogodowa;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +27,20 @@ public class StatisticsFragment extends MeteoLab {
     private Button mButtonChoose;
 
     private LineChart mChart;
-    private List<Entry> entries = new ArrayList<>();
+    private static List<Entry> entries = new ArrayList<>();
     public String StatisticsType;
+
+    private final String EXTRA_STATISTICS_TYPE = "statisticsTypeSave";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            StatisticsType = savedInstanceState.getString(EXTRA_STATISTICS_TYPE);
+            Log.d("statType", " :" + StatisticsType);
+            setStatisticsType(EXTRA_STATISTICS_TYPE);
+        }
     }
 
     @Override
@@ -49,15 +59,28 @@ public class StatisticsFragment extends MeteoLab {
             }
         });
 
+
         return view;
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(EXTRA_STATISTICS_TYPE,StatisticsType);
+        Log.d("statType", " :" + StatisticsType);
+
+    }
+
 
     public void instalChart(){
         LineDataSet dataSet = new LineDataSet(entries,StatisticsType);
-        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        // dataSet.setColor(Color.BLUE);
+        dataSet.setDrawValues(false);
+
+         dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+         dataSet.setColor(Color.GREEN);
+         dataSet.setDrawCircles(false);
+         dataSet.setLineWidth(2f);
         //dataSet.setValueTextColor(Color.CYAN);
         LineData lineData = new LineData(dataSet);
         mChart.setData(lineData);
@@ -66,7 +89,6 @@ public class StatisticsFragment extends MeteoLab {
 
     public void addEntry(int xDay, float yStat){
         LineData data = mChart.getData();
-
         entries.add(new Entry(xDay,yStat));
         //data.notifyDataChanged();
         mChart.notifyDataSetChanged();
@@ -75,14 +97,13 @@ public class StatisticsFragment extends MeteoLab {
 
     public void configureAxis(){
 
-        XAxis mXAxis = mChart.getXAxis();
-        mXAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        mXAxis.setTextSize(10f);
-        mXAxis.setTextColor(Color.BLACK);
-        //mXAxis.setAxisMinimum(0);
-        //mXAxis.setAxisMaximum(24);
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(10f);
+        xAxis.setTextColor(Color.BLACK);
 
-        YAxis mYAxisLeft = mChart.getAxisLeft();
+        YAxis YAxisLeft = mChart.getAxisLeft();
 
         mChart.getAxisRight().setEnabled(false);
     }
@@ -95,6 +116,7 @@ public class StatisticsFragment extends MeteoLab {
         Float[] lightSensitivity24;
         Float[] pressure24;
         int hour = 1;
+        entries.clear();
 
         if(MainFragment.sServerState){
             MeteoData meteoJsonData = getJsonData();
@@ -149,9 +171,10 @@ public class StatisticsFragment extends MeteoLab {
             instalChart();
             configureAxis();
 
-        }//koniec ifa
+    }else {
+            Toast.makeText(getActivity(),R.string.negativeStatText,Toast.LENGTH_SHORT).show();
+        }
 
-        Toast.makeText(getActivity(),R.string.negativeStatText,Toast.LENGTH_SHORT).show();
     }
 
 

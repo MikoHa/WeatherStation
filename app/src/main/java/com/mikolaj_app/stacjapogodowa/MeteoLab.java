@@ -25,10 +25,10 @@ import java.util.ArrayList;
 
 public class MeteoLab extends Fragment {
 
-    private static final String TAG = "MeteoLabHTTP";
-    private final String url = "https://api.myjson.com/bins/hhtiz";
+    private final String TAG = "MeteoLabHTTP";
+    public static Boolean sServerState = false;
+    private final String url = "https://api.myjson.com/bins/12j7w6"; //szkielet api
     public static MeteoData mMeteoData;
-    private int id;
     public Toast positiveToast;
     public Toast negativeToast;
 
@@ -52,17 +52,14 @@ public class MeteoLab extends Fragment {
         switch (serverName){
 
             case "Czujnik nr 1":
-                id = 0; //dla id = 1
                 new MeteoItemsTask().execute();
                 break;
 
             case "Czujnik nr 2":
-                id = 1;
                 new MeteoItemsTask().execute();
                 break;
 
             case "Czujnik nr 3":
-                //id = 2;     jeszcze nie ma w json
                 new MeteoItemsTask().execute();
                 break;
         }
@@ -128,8 +125,8 @@ public class MeteoLab extends Fragment {
 
         try {
             String jsonString = getUrlString(url);
-            JSONArray jsonArray = new JSONArray(jsonString);
-            parseItems(meteoData,jsonArray);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            parseItems(meteoData,jsonObject);
             positiveToast.show();
             MainFragment.sServerState = true;
             Log.i(TAG, "Pobrano dane z bartnikowego API: " + jsonString);
@@ -147,42 +144,38 @@ public class MeteoLab extends Fragment {
 
 
     //parsowanie
-    private void parseItems(MeteoData item, JSONArray jsonArray)
+    private void parseItems(MeteoData item, JSONObject jsonObject)
         throws IOException, JSONException {
 
-                JSONObject meteoJsonObject = jsonArray.getJSONObject(id);
+                JSONObject meteoJsonObject = jsonObject;
 
                 item.setId(meteoJsonObject.getString("sensorId"));
                 item.setName(meteoJsonObject.getString("sensorName"));
 
-                //JSONObject currentData = meteoJsonObject.getJSONObject("currentData");
+                Log.d(TAG, "name" + item.getName() + " id" + item.getId());
 
-                JSONArray dataMeteoArray = meteoJsonObject.getJSONArray("last24HoursData");
-                JSONObject dataMeteoObject = dataMeteoArray.getJSONObject(0);
+                JSONObject currentData = meteoJsonObject.getJSONObject("currentData");
 
-                item.setTemperature(dataMeteoObject.getString("temperature"));
-                item.setHumidity(dataMeteoObject.getString("humidity"));
-                item.setLightSensitivity(dataMeteoObject.getString("lightSensitivity"));
-                item.setPressure(dataMeteoObject.getString("pressure"));
+                 item.setTemperature(currentData.getString("temperature"));
+                 item.setHumidity(currentData.getString("humidity"));
+                 item.setLightSensitivity(currentData.getString("lightSensitivity"));
+                 item.setPressure(currentData.getString("pressure"));
 
-                /*
-
-                    CZEKAM NA NOWE API OD BARTNIKA DO STATYSTYK  :(
 
                 JSONArray dataMeteoArray = meteoJsonObject.getJSONArray("last24HoursData");
                 for(int i = 0; i < dataMeteoArray.length(); i++){
                     JSONObject dataMeteoObject = dataMeteoArray.getJSONObject(i);
-                    temperatureStat24[i] = dataMeteoObject.getString("temperature");
-                    humidityStat24[i] = dataMeteoObject.getString("humidity");
-                    lightSensitivity24[i] = dataMeteoObject.getString("lightSensitivity");
-                    pressure24[i] = dataMeteoObject.getString("pressure");
+                    temperatureStat24[i] =  Float.parseFloat( dataMeteoObject.getString("temperature"));
+                    humidityStat24[i] = Float.parseFloat( dataMeteoObject.getString("humidity"));
+                    lightSensitivity24[i] = Float.parseFloat( dataMeteoObject.getString("lightSensitivity"));
+                    pressure24[i] = Float.parseFloat( dataMeteoObject.getString("pressure"));
                 }
 
                 item.setTemperatureStat24(temperatureStat24);
                 item.setHumidityStat24(humidityStat24);
                 item.setLightSensitivity24(lightSensitivity24);
                 item.setPressure24(pressure24);
-                */
+
 
 
         }

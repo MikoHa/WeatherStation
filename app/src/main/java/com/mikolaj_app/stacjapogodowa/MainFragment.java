@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainFragment extends MeteoLab {
-    public static Boolean sServerState = false;
     public MeteoData mMeteoJsonData;
 
     public TextView mWelcomeText;
