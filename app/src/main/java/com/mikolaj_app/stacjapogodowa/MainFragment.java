@@ -46,7 +46,7 @@ public class MainFragment extends MeteoLab {
             @Override
             public void onRefresh() {
                 if(sServerState){
-                    loadToast();
+                    positiveToast = Toast.makeText(getActivity(),R.string.updateServerToast,Toast.LENGTH_SHORT);
                     new MeteoItemsTask().execute();
                     updateWelcomeText();
                 }
@@ -83,13 +83,13 @@ public class MainFragment extends MeteoLab {
 
         }else{
             mWelcomeText.setText(negativeText);
+            mCounterTemperature.setText(R.string.nullText);
+            mCounterPressure.setText(R.string.nullText);
+            mCounterHumidity.setText(R.string.nullText);
+            mCounterInsolation.setText(R.string.nullText);
         }
     }
 
-    public void loadToast(){
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        positiveToast = Toast.makeText(activity,R.string.updateServerToast,Toast.LENGTH_SHORT);
-        negativeToast = Toast.makeText(activity,R.string.notConnectSeverToast,Toast.LENGTH_SHORT);
-    }
+
 
 }

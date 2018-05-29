@@ -18,6 +18,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import org.joda.time.DateTime;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,11 @@ public class StatisticsFragment extends MeteoLab {
             @Override
             public void onClick(View view) {
                 StatisticsType = (String) mSpinnerStatistics.getSelectedItem();
-                setStatisticsType(StatisticsType);
+                if(MainFragment.sServerState){
+                    setStatisticsType(StatisticsType);
+                }else {
+                    Toast.makeText(getActivity(),R.string.negativeStatText,Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -90,8 +96,6 @@ public class StatisticsFragment extends MeteoLab {
     public void addEntry(int xDay, float yStat){
         LineData data = mChart.getData();
         entries.add(new Entry(xDay,yStat));
-        //data.notifyDataChanged();
-        mChart.notifyDataSetChanged();
     }
 
 
@@ -110,16 +114,18 @@ public class StatisticsFragment extends MeteoLab {
 
 
     public void setStatisticsType(String statisticsType){
+        MeteoData meteoJsonData = getJsonData();
+        DateTime[] time24 = meteoJsonData.getDateTime24();
 
         Float[] temperatureStat24;
         Float[] humidityStat24;
         Float[] lightSensitivity24;
         Float[] pressure24;
-        int hour = 1;
-        entries.clear();
+        int i = 0;
 
-        if(MainFragment.sServerState){
-            MeteoData meteoJsonData = getJsonData();
+
+        if(time24.length != 0){
+            entries.clear();
 
             switch (statisticsType){
 
@@ -128,8 +134,9 @@ public class StatisticsFragment extends MeteoLab {
                     temperatureStat24 = meteoJsonData.getTemperatureStat24();
 
                     for (Float aTemperatureStat24 : temperatureStat24) {
+                        int hour = time24[i].getHourOfDay();
                         addEntry(hour, aTemperatureStat24);
-                        hour++;
+                        i++;
                     }
 
                     break;
@@ -139,8 +146,9 @@ public class StatisticsFragment extends MeteoLab {
                     humidityStat24 = meteoJsonData.getHumidityStat24();
 
                     for (Float aHumidityStat24 : humidityStat24) {
+                        int hour = time24[i].getHourOfDay();
                         addEntry(hour, aHumidityStat24);
-                        hour++;
+                        i++;
                     }
 
                     break;
@@ -150,8 +158,9 @@ public class StatisticsFragment extends MeteoLab {
                     lightSensitivity24 = meteoJsonData.getLightSensitivity24();
 
                     for (Float aLightSensitivity24 : lightSensitivity24) {
+                        int hour = time24[i].getHourOfDay();
                         addEntry(hour, aLightSensitivity24);
-                        hour++;
+                        i++;
                     }
 
                     break;
@@ -161,8 +170,9 @@ public class StatisticsFragment extends MeteoLab {
                     pressure24 = meteoJsonData.getPressure24();
 
                     for (Float aPressure24 : pressure24) {
+                        int hour = time24[i].getHourOfDay();
                         addEntry(hour, aPressure24);
-                        hour++;
+                        i++;
                     }
 
                     break;
@@ -171,8 +181,8 @@ public class StatisticsFragment extends MeteoLab {
             instalChart();
             configureAxis();
 
-    }else {
-            Toast.makeText(getActivity(),R.string.negativeStatText,Toast.LENGTH_SHORT).show();
+    }else{
+            Toast.makeText(getActivity(),"brak statystyk do wyświetlenia",Toast.LENGTH_SHORT).show();
         }
 
     }

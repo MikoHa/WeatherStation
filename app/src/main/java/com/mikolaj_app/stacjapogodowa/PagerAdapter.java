@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class PagerAdapter extends AppCompatActivity {
 
     public static ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String tabTitles[] = new String[]{"Zarządzanie", "Status", "Statystyki"};
+    private String tabTitles[] = new String[]{"Status", "Statystyki"};
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -68,7 +68,7 @@ public class PagerAdapter extends AppCompatActivity {
 
         });
 
-        mViewPager.setCurrentItem(1); // -> czyli MainFragment
+        mViewPager.setCurrentItem(0); // -> czyli MainFragment
 
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -76,7 +76,6 @@ public class PagerAdapter extends AppCompatActivity {
     }//koniec onCreate
 
     public void installFragments(){
-        mFragments.add(new ManagementFragment());
         mFragments.add(new MainFragment());
         mFragments.add(new StatisticsFragment());
         mInstallFrag = false;

@@ -1,5 +1,7 @@
 package com.mikolaj_app.stacjapogodowa;
 
+import org.joda.time.DateTime;
+
 public class MeteoData {
     private String mId;
     private String mName;
@@ -12,6 +14,7 @@ public class MeteoData {
     private Float[] mHumidityStat24;
     private Float[] mLightSensitivity24;
     private Float[] mPressure24;
+    private DateTime[] DateTime24;
 
 
     public String getId() {
@@ -95,5 +98,13 @@ public class MeteoData {
 
     public void setPressure24(Float[] pressure24) {
         mPressure24 = pressure24;
+    }
+
+    public DateTime[] getDateTime24() {
+        return DateTime24;
+    }
+
+    public void setDateTime24(DateTime[] dateTime24) {
+        DateTime24 = dateTime24;
     }
 }
