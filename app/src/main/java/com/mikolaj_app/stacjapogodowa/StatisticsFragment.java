@@ -106,6 +106,8 @@ public class StatisticsFragment extends MeteoLab {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.BLACK);
+        xAxis.setGranularity(1f);
+
 
         YAxis YAxisLeft = mChart.getAxisLeft();
 
